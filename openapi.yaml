@@ -51,6 +51,10 @@ paths:
                 $ref: '#/components/schemas/Like'
         '405':
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /likes/{cat_id}:
     delete:
       security:
@@ -71,6 +75,10 @@ paths:
           description: Successful operation
         '404':
           description: Like not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /user:
     post:
       tags:
@@ -99,6 +107,10 @@ paths:
                 $ref: '#/components/schemas/User'
         '405':
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   securitySchemes:
@@ -140,3 +152,15 @@ components:
         password:
           type: string
           description: Пароль пользователя
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 405
+        message:
+          type: string
+          example: Invalid input
+      required:
+        - statusCode
+        - message
