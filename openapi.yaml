@@ -112,11 +112,17 @@ components:
       type: object
       required:
         - cat_id
+        - cat_url
       properties:
         cat_id:
           description: Идентификатор котика из https://thecatapi.com
           type: string
           example: asu7as
+        cat_url:
+          description: URL картинки котика
+          format: uri
+          type: string
+          example: https://cdn2.thecatapi.com/images/asu7as.jpg
         created_at:
           type: string
           format: date-time
@@ -134,4 +140,3 @@ components:
         password:
           type: string
           description: Пароль пользователя
-
