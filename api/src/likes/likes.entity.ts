@@ -1,0 +1,28 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { User } from '../users/user.entity';
+
+@Entity('likes')
+export class Like {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ name: 'cat_id' })
+  catId: string;
+
+  @Column({ name: 'cat_url' })
+  catUrl: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.likes, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'fk_user_id' })
+  user: User;
+}
