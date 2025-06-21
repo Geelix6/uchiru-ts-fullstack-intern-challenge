@@ -28,6 +28,16 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Like'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                statusCode: 401
+                message: "Invalid token"
+                error: "Unauthorized"
     post:
       security:
         - bearerAuth: []
@@ -49,12 +59,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Like'
-        '405':
+        '400':
           description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                statusCode: 401
+                message: "Invalid token"
+                error: "Unauthorized"
   /likes/{cat_id}:
     delete:
       security:
@@ -73,6 +93,16 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                statusCode: 401
+                message: "Invalid token"
+                error: "Unauthorized"
         '404':
           description: Like not found
           content:
@@ -105,12 +135,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '405':
+        '400':
           description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                statusCode: 409
+                message: User with this login already exists
+                error: Conflict
 
 components:
   securitySchemes:
@@ -154,13 +194,24 @@ components:
           description: Пароль пользователя
     ErrorResponse:
       type: object
-      properties:
-        statusCode:
-          type: integer
-          example: 405
-        message:
-          type: string
-          example: Invalid input
       required:
         - statusCode
         - message
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          oneOf:
+            - type: array
+              items:
+                type: string
+              example: 
+                - "property extra should not exist"
+                - "login should not be empty"
+                - "password must be a string"
+            - type: string
+              example: "User with this login already exists"
+        error:
+          type: string
+          example: Bad Request
