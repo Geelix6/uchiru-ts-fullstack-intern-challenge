@@ -109,6 +109,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                statusCode: 404
+                message: "Like not found"
+                error: "Not Found"
   /user:
     post:
       tags:
