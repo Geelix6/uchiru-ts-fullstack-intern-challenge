@@ -22,7 +22,10 @@ export class Like {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.likes, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.likes, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   @JoinColumn({ name: 'fk_user_id' })
   user: User;
 }
