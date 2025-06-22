@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthenticatedRequest } from 'src/common/interfaces/authenticated-request.interface';
-import { LikesService } from './likes.service';
-import { LikeResponseDto } from './dto/like-response-dto';
 import { CreateLikeDto } from './dto/create-like.dto';
+import { LikeResponseDto } from './dto/like-response-dto';
+import { LikesService } from './likes.service';
 
 @UseGuards(AuthGuard)
 @Controller('likes')

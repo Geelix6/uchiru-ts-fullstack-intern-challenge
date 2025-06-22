@@ -1,5 +1,5 @@
+import { Like } from 'src/likes/likes.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Like } from '../likes/likes.entity';
 
 @Entity('users')
 export class User {

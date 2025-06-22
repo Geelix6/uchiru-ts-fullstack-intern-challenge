@@ -1,3 +1,4 @@
+import { User } from 'src/users/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,7 +7,6 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from '../users/user.entity';
 
 @Entity('likes')
 export class Like {

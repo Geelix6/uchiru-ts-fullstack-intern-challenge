@@ -1,16 +1,16 @@
+import { HttpService } from '@nestjs/axios';
 import {
   Injectable,
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpService } from '@nestjs/axios';
-import { Repository } from 'typeorm';
 import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
-import { Like } from './likes.entity';
 import { User } from 'src/users/user.entity';
+import { Repository } from 'typeorm';
 import { CreateLikeDto } from './dto/create-like.dto';
+import { Like } from './likes.entity';
 
 @Injectable()
 export class LikesService {

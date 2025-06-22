@@ -1,11 +1,11 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
-import { Like } from './likes.entity';
-import { LikesController } from './likes.controller';
-import { LikesService } from './likes.service';
 import { AuthModule } from 'src/auth/auth.module';
-import { HttpModule } from '@nestjs/axios';
+import { UsersModule } from 'src/users/users.module';
+import { LikesController } from './likes.controller';
+import { Like } from './likes.entity';
+import { LikesService } from './likes.service';
 
 @Module({
   imports: [
