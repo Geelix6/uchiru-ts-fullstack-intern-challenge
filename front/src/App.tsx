@@ -9,7 +9,7 @@ const App: React.FC = () => {
     <div className="relative">
       <BrowserRouter>
         <header className="fixed top-0 z-10 h-16 w-full bg-sky-500 shadow-xl">
-          <div className="mx-auto h-full max-w-[1440px] px-16">
+          <div className="mx-auto h-full max-w-[1440px] px-8 md:px-16">
             <nav className="flex h-full text-sm tracking-wide text-white/70">
               <NavLink
                 to="/"
@@ -38,7 +38,7 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        <main className="mx-auto mt-16 max-w-[1440px] px-16 pt-12">
+        <main className="mx-auto mt-16 max-w-[1440px] px-8 pt-12 md:px-16">
           <Routes>
             <Route path="/" element={<AllCatsPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
