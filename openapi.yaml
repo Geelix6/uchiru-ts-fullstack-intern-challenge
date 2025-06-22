@@ -205,12 +205,12 @@ components:
         cat_id:
           description: Идентификатор котика из https://thecatapi.com
           type: string
-          example: asu7as
+          example: cd0
         cat_url:
           description: URL картинки котика
           format: uri
           type: string
-          example: https://cdn2.thecatapi.com/images/asu7as.jpg
+          example: https://cdn2.thecatapi.com/images/cd0.jpg
     LikeResponse:
       type: object
       required:
@@ -221,12 +221,12 @@ components:
         cat_id:
           description: Идентификатор котика из https://thecatapi.com
           type: string
-          example: asu7as
+          example: cd0
         cat_url:
           description: URL картинки котика
           format: uri
           type: string
-          example: https://cdn2.thecatapi.com/images/asu7as.jpg
+          example: https://cdn2.thecatapi.com/images/cd0.jpg
         created_at:
           type: string
           format: date-time
