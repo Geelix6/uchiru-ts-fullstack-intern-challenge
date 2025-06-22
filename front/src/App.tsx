@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import AllCatsPage from './pages/AllCatsPage';
+import FavoritesPage from './pages/FavoritesPage';
+import clsx from 'clsx';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App: React.FC = () => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="relative">
+      <BrowserRouter>
+        <header className="fixed top-0 z-10 h-16 w-full bg-sky-500 shadow-xl">
+          <div className="mx-auto h-full max-w-[1440px] px-16">
+            <nav className="flex h-full text-sm tracking-wide text-white/70">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  clsx(
+                    'flex items-center px-6 transition-colors',
+                    isActive ? 'bg-sky-600 text-white' : 'hover:bg-sky-600/70',
+                  )
+                }
+                end
+              >
+                Все котики
+              </NavLink>
+              <NavLink
+                to="/favorites"
+                className={({ isActive }) =>
+                  clsx(
+                    'flex items-center px-6 transition-colors',
+                    isActive ? 'bg-sky-600 text-white' : 'hover:bg-sky-600/70',
+                  )
+                }
+              >
+                Любимые
+              </NavLink>
+            </nav>
+          </div>
+        </header>
 
-export default App
+        <main className="mx-auto mt-16 max-w-[1440px] px-16 pt-12">
+          <Routes>
+            <Route path="/" element={<AllCatsPage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
+    </div>
+  );
+};
+
+export default App;
