@@ -30,6 +30,9 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_USER: ${POSTGRES_USER}
       DB_NAME: ${POSTGRES_DB}
+      HMAC_SECRET: hmac_secret
+      HMAC_SALT: hmac_salt
+      CAT_API_KEY: live_0rglkFwYzYPvhjC0c8FzSAGNuSuAkHeJkSZRvUt5ziXWx54XUOlBL4noxWFHSSRk
     depends_on:
       cat-pinterest-api-pg:
         condition: service_healthy
