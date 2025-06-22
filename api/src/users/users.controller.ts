@@ -9,11 +9,14 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post()
-  async newUser(@Body() dto: CreateUserDto, @Res() res: Response) {
+  async newUser(
+    @Body() dto: CreateUserDto,
+    @Res() res: Response,
+  ): Promise<void> {
     const user = await this.usersService.create(dto.login, dto.password);
     const token = generateToken(user.id);
 
     res.set('X-Auth-Token', token);
-    return res.status(HttpStatus.CREATED).send();
+    res.status(HttpStatus.CREATED).send();
   }
 }
