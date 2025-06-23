@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CatGrid } from '@/components/CatGrid';
+import { useCatStore } from '@/store/useCatStore';
 
 const FavoritesPage: React.FC = () => {
-  const cats = Array.from({ length: 5 }, (_, i) => ({
-    id: `cat-${i + 1}`,
-    url: 'https://placehold.co/400',
-    createdAt: '123',
-  }));
+  const { favoriteCats, refreshFavorites, loading } = useCatStore();
 
-  return cats.length === 0 ? (
-    <p className="text-center text-gray-400">У вас пока что нет любимых котиков 🐈</p>
-  ) : (
-    <CatGrid cats={cats} className="mb-12" />
-  );
+  useEffect(() => {
+    refreshFavorites();
+  }, []);
+
+  if (loading) {
+    return <p className="text-center text-sm tracking-wide">... Загружаем любимых котиков ...</p>;
+  }
+
+  if (favoriteCats.length === 0) {
+    return (
+      <p className="text-center text-sm tracking-wide">У вас пока что нет любимых котиков 🐈</p>
+    );
+  }
+
+  return <CatGrid cats={favoriteCats} className="mb-12" />;
 };
 
 export default FavoritesPage;

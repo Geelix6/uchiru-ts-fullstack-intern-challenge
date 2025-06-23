@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { CatResponseDto } from '@/dto/CatResponseDto';
+import { CatDto } from '@/dto/CatDto';
 import OutlinedHeartIcon from './icons/OutlinedHeartIcon';
 import FilledHeartIcon from './icons/FilledHeartIcon';
 
-type CatCardProps = Pick<CatResponseDto, 'id' | 'url'>;
-
-export const CatCard: React.FC<CatCardProps> = ({ id, url }) => {
+export const CatCard: React.FC<CatDto> = ({ id, url }) => {
   const [hoverButton, setHoverButton] = useState(false);
 
   return (
