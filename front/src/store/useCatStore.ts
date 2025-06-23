@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { toast } from 'react-toastify';
 import { listLikes, newUser, dropLike, addLike } from '@/api/backendApi';
 import { fetchCats } from '@/api/catApi';
 import { CatDto } from '@/dto/CatDto';
@@ -8,6 +9,7 @@ type CatStore = {
   favoriteCats: CatDto[];
   authChecked: boolean;
   loading: boolean;
+  hasMore: boolean;
 
   initAuth: () => Promise<void>;
   loadMoreCats: () => Promise<void>;
@@ -20,6 +22,7 @@ export const useCatStore = create<CatStore>((set, get) => ({
   favoriteCats: [],
   authChecked: false,
   loading: false,
+  hasMore: true,
 
   initAuth: async () => {
     const existing = localStorage.getItem('cat-pinterest-auth-token');
@@ -32,8 +35,8 @@ export const useCatStore = create<CatStore>((set, get) => ({
         const token = await newUser(login, password);
         localStorage.setItem('cat-pinterest-auth-token', token);
         set({ authChecked: true });
-      } catch (err) {
-        console.error('Auth init failed', err);
+      } catch (err: any) {
+        toast.error(`Ошибка авторизации: ${err.message || err}`);
       }
     }
   },
@@ -53,9 +56,9 @@ export const useCatStore = create<CatStore>((set, get) => ({
         url: cat.url,
         isLiked: likedIds.has(cat.id),
       }));
-      set({ cats: [...cats, ...newCats] });
-    } catch (err) {
-      console.error('loadMoreCats error', err);
+      set({ cats: [...cats, ...newCats], hasMore: newCats.length > 0 });
+    } catch (err: any) {
+      toast.error(`Не удалось загрузить котиков: ${err.message || err}`);
     } finally {
       set({ loading: false });
     }
@@ -75,8 +78,8 @@ export const useCatStore = create<CatStore>((set, get) => ({
         isLiked: true,
       }));
       set({ favoriteCats });
-    } catch (err) {
-      console.error('refreshFavorites error', err);
+    } catch (err: any) {
+      toast.error(`Не удалось загрузить избранное: ${err.message || err}`);
     } finally {
       set({ loading: false });
     }
@@ -98,8 +101,8 @@ export const useCatStore = create<CatStore>((set, get) => ({
       }
 
       set({ cats: cats.map((c) => (c.id === cat.id ? { ...c, isLiked: !c.isLiked } : c)) });
-    } catch (err) {
-      console.error('toggleLike error', err);
+    } catch (err: any) {
+      toast.error(`Ошибка при обновлении лайка: ${err.message || err}`);
     }
   },
 }));

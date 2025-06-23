@@ -1,5 +1,8 @@
+import 'react-toastify/dist/ReactToastify.css';
+
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import clsx from 'clsx';
 import LoadingSpinnerIcon from './components/icons/LoadingSpinnerIcon';
 import AllCatsPage from './pages/AllCatsPage';
@@ -50,6 +53,16 @@ const App: React.FC = () => {
           </Routes>
         )}
       </main>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
     </BrowserRouter>
   );
 };
