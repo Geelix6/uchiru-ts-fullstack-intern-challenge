@@ -32,7 +32,7 @@ services:
       DB_NAME: ${POSTGRES_DB}
       HMAC_SECRET: hmac_secret
       HMAC_SALT: hmac_salt
-      CAT_API_KEY: live_0rglkFwYzYPvhjC0c8FzSAGNuSuAkHeJkSZRvUt5ziXWx54XUOlBL4noxWFHSSRk
+      CAT_API_KEY: ${CAT_API_KEY}
     depends_on:
       cat-pinterest-api-pg:
         condition: service_healthy
@@ -42,6 +42,9 @@ services:
     image: cat-pinterest-front
     build:
       context: ./front/
+      args:
+        VITE_API_BASE_URL: /api
+        VITE_CAT_API_KEY: ${CAT_API_KEY}
     networks:
       - cat-pinterest-net
     environment:
