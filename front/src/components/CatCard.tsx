@@ -4,8 +4,29 @@ import { CatDto } from '@/dto/CatDto';
 import OutlinedHeartIcon from './icons/OutlinedHeartIcon';
 import FilledHeartIcon from './icons/FilledHeartIcon';
 
-export const CatCard: React.FC<CatDto> = ({ id, url }) => {
+interface CatCardProps extends CatDto {
+  onToggle: () => Promise<void>;
+}
+
+export const CatCard: React.FC<CatCardProps> = ({ id, url, isLiked, onToggle }) => {
   const [hoverButton, setHoverButton] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [justToggled, setJustToggled] = useState(false);
+
+  const handleClick = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      await onToggle();
+      setJustToggled(true);
+      setTimeout(() => setJustToggled(false), 500);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const showFilled = hoverButton || isLiked;
 
   return (
     <div className="group relative aspect-square transition-all duration-300 hover:scale-115 hover:shadow-lg">
@@ -18,8 +39,12 @@ export const CatCard: React.FC<CatDto> = ({ id, url }) => {
         )}
         onMouseEnter={() => setHoverButton(true)}
         onMouseLeave={() => setHoverButton(false)}
+        onClick={handleClick}
+        disabled={loading}
       >
-        {hoverButton ? <FilledHeartIcon /> : <OutlinedHeartIcon />}
+        <div className={clsx(loading && 'opacity-75', justToggled && 'animate-bounce')}>
+          {showFilled ? <FilledHeartIcon /> : <OutlinedHeartIcon />}
+        </div>
       </button>
     </div>
   );

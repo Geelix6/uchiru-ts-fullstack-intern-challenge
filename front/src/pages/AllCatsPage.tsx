@@ -3,12 +3,12 @@ import { CatGrid } from '@/components/CatGrid';
 import { useCatStore } from '@/store/useCatStore';
 
 const AllCatsPage: React.FC = () => {
-  const { cats, loadMoreCats, loading } = useCatStore();
+  const { cats, loadMoreCats, toggleLike, loading } = useCatStore();
 
   useEffect(() => {
-    loadMoreCats();
-
-    // refreshFavorites();
+    if (cats.length === 0) {
+      loadMoreCats();
+    }
   }, []);
 
   if (loading && cats.length === 0) {
@@ -17,7 +17,13 @@ const AllCatsPage: React.FC = () => {
 
   return (
     <>
-      <CatGrid className="mb-12" cats={cats} />
+      <CatGrid
+        className="mb-12"
+        cats={cats}
+        onToggle={(cat) => {
+          return toggleLike(cat);
+        }}
+      />
 
       {loading && (
         <p className="mb-12 text-center text-sm tracking-wide">... Загружаем еще котиков ...</p>
@@ -33,8 +39,6 @@ const AllCatsPage: React.FC = () => {
           </button>
         </div>
       )}
-
-      {/* {!hasMore && !loading && <p className="mt-4 text-center text-gray-500">Больше нет котиков</p>} */}
     </>
   );
 };

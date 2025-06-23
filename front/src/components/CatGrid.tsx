@@ -7,9 +7,10 @@ import { CatCard } from './CatCard';
 type CatGridProps = {
   cats: CatDto[];
   className?: string;
+  onToggle: (cat: CatDto) => Promise<void>;
 };
 
-export const CatGrid: React.FC<CatGridProps> = ({ cats, className }) => {
+export const CatGrid: React.FC<CatGridProps> = ({ cats, className, onToggle }) => {
   return (
     <div
       className={twMerge(
@@ -17,7 +18,13 @@ export const CatGrid: React.FC<CatGridProps> = ({ cats, className }) => {
       )}
     >
       {cats.map((cat, idx) => (
-        <CatCard key={idx} id={cat.id} url={cat.url} />
+        <CatCard
+          key={idx}
+          id={cat.id}
+          url={cat.url}
+          isLiked={cat.isLiked}
+          onToggle={() => onToggle(cat)}
+        />
       ))}
     </div>
   );

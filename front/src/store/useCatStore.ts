@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { listLikes, newUser } from '@/api/backendApi';
+import { listLikes, newUser, dropLike, addLike } from '@/api/backendApi';
 import { fetchCats } from '@/api/catApi';
 import { CatDto } from '@/dto/CatDto';
 
@@ -12,7 +12,7 @@ type CatStore = {
   initAuth: () => Promise<void>;
   loadMoreCats: () => Promise<void>;
   refreshFavorites: () => Promise<void>;
-  // toggleFavorite: (cat: CatDto) => Promise<void>;
+  toggleLike: (cat: CatDto) => Promise<void>;
 };
 
 export const useCatStore = create<CatStore>((set, get) => ({
@@ -42,9 +42,20 @@ export const useCatStore = create<CatStore>((set, get) => ({
     const { loading, cats } = get();
     if (loading) return;
     set({ loading: true });
+
+    const token = localStorage.getItem('cat-pinterest-auth-token')!;
     try {
-      const newCats = await fetchCats();
+      const likes = await listLikes(token);
+      const likedIds = new Set(likes.map((l) => l.cat_id));
+      const newItems = await fetchCats();
+      const newCats: CatDto[] = newItems.map((cat) => ({
+        id: cat.id,
+        url: cat.url,
+        isLiked: likedIds.has(cat.id),
+      }));
       set({ cats: [...cats, ...newCats] });
+    } catch (err) {
+      console.error('loadMoreCats error', err);
     } finally {
       set({ loading: false });
     }
@@ -58,12 +69,12 @@ export const useCatStore = create<CatStore>((set, get) => ({
     const token = localStorage.getItem('cat-pinterest-auth-token')!;
     try {
       const likes = await listLikes(token);
-      const favSet = new Set<string>();
-      const favCats = likes.map((l) => {
-        favSet.add(l.cat_id);
-        return { id: l.cat_id, url: l.cat_url } as CatDto;
-      });
-      set({ favoriteCats: favCats });
+      const favoriteCats: CatDto[] = likes.map((like) => ({
+        id: like.cat_id,
+        url: like.cat_url,
+        isLiked: true,
+      }));
+      set({ favoriteCats });
     } catch (err) {
       console.error('refreshFavorites error', err);
     } finally {
@@ -71,20 +82,24 @@ export const useCatStore = create<CatStore>((set, get) => ({
     }
   },
 
-  // toggleFavorite: async (cat) => {
-  //   const token = localStorage.getItem('cat-pinterest-auth-token')!;
-  //   const favs = new Set(get().favorites);
-  //   const favCats = [...get().favoriteCats];
-  //   if (favs.has(cat.id)) {
-  //     await dropLike(token, cat.id);
-  //     favs.delete(cat.id);
-  //     const idx = favCats.findIndex((c) => c.id === cat.id);
-  //     if (idx !== -1) favCats.splice(idx, 1);
-  //   } else {
-  //     await addLike(token, { cat_id: cat.id, cat_url: cat.url });
-  //     favs.add(cat.id);
-  //     favCats.push(cat);
-  //   }
-  //   set({ favorites: favs, favoriteCats: favCats });
-  // },
+  toggleLike: async (cat: CatDto) => {
+    const { favoriteCats, cats } = get();
+
+    const token = localStorage.getItem('cat-pinterest-auth-token')!;
+    try {
+      if (cat.isLiked) {
+        await dropLike(token, cat.id);
+        set({
+          favoriteCats: favoriteCats.filter((c) => c.id !== cat.id),
+        });
+      } else {
+        await addLike(token, { cat_id: cat.id, cat_url: cat.url });
+        set({ favoriteCats: [...favoriteCats, { ...cat, isLiked: true }] });
+      }
+
+      set({ cats: cats.map((c) => (c.id === cat.id ? { ...c, isLiked: !c.isLiked } : c)) });
+    } catch (err) {
+      console.error('toggleLike error', err);
+    }
+  },
 }));

@@ -1,8 +1,8 @@
-import { CatDto } from '@/dto/CatDto';
+import { CatResponseDto } from '@/dto/CatResponseDto';
 
 const BASE_CAT_API_URL = 'https://api.thecatapi.com/v1';
 
-export async function fetchCats(limit = 30): Promise<CatDto[]> {
+export async function fetchCats(limit = 30): Promise<CatResponseDto[]> {
   const res = await fetch(`${BASE_CAT_API_URL}/images/search?limit=${limit}`, {
     headers: {
       'x-api-key': import.meta.env.VITE_CAT_API_KEY,

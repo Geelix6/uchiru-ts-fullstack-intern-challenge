@@ -3,7 +3,7 @@ import { CatGrid } from '@/components/CatGrid';
 import { useCatStore } from '@/store/useCatStore';
 
 const FavoritesPage: React.FC = () => {
-  const { favoriteCats, refreshFavorites, loading } = useCatStore();
+  const { favoriteCats, refreshFavorites, loading, toggleLike } = useCatStore();
 
   useEffect(() => {
     refreshFavorites();
@@ -19,7 +19,15 @@ const FavoritesPage: React.FC = () => {
     );
   }
 
-  return <CatGrid cats={favoriteCats} className="mb-12" />;
+  return (
+    <CatGrid
+      cats={favoriteCats}
+      className="mb-12"
+      onToggle={(cat) => {
+        return toggleLike(cat);
+      }}
+    />
+  );
 };
 
 export default FavoritesPage;
